@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CardContent, Paper, Skeleton, Stack, Typography } from "@mui/material";
 import { APIRecipeResponse, Ingredient, RecipeIngredient } from "@/app/types";
 import { IngredientSearch } from "../IngredientSearch";
@@ -16,30 +16,35 @@ interface ClientRecipeSearchProps {
 const ClientRecipeSearch = ({
   initialIngredients,
 }: ClientRecipeSearchProps) => {
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-  const [value, setValue] = useState<Ingredient | null>(null);
-  const [inputValue, setInputValue] = useState<string>("");
-  const [recipeVisible, setRecipeVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // 選択された食材のリスト（Ingredient型の配列に変更）
+  const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
+    []
+  );
+  // 食材のリスト
   const [ingredients] = useState(initialIngredients);
+  // レシピが表示されるかどうか
+  const [recipeVisible, setRecipeVisible] = useState(false);
+  // ローディング中かどうか
+  const [isLoading, setIsLoading] = useState(false);
+  // レシピの情報
   const [dishName, setDishName] = useState<string>("");
+  // レシピの材料
   const [currentRecipeIngredients, setCurrentRecipeIngredients] = useState<
     RecipeIngredient[]
   >([]);
+  // レシピの手順
   const [currentSteps, setCurrentSteps] = useState<string[]>([]);
 
-  const handleAddIngredient = () => {
-    if (inputValue && !selectedIngredients.includes(inputValue)) {
-      setSelectedIngredients([...selectedIngredients, inputValue]);
-      setInputValue("");
-      setValue(null);
+  const onAddIngredient = (newIngredient: Ingredient) => {
+    if (!selectedIngredients.some((ing) => ing.name === newIngredient.name)) {
+      setSelectedIngredients([...selectedIngredients, newIngredient]);
     }
   };
 
-  const handleDelete = (ingredientToDelete: string) => {
+  const onDeleteIngredient = (ingredientToDelete: string) => {
     setSelectedIngredients(
       selectedIngredients.filter(
-        (ingredient) => ingredient !== ingredientToDelete
+        (ingredient) => ingredient.name !== ingredientToDelete
       )
     );
   };
@@ -63,7 +68,7 @@ const ClientRecipeSearch = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ingredients: selectedIngredients,
+          ingredients: selectedIngredients.map((ing) => ing.name),
         }),
       });
 
@@ -73,7 +78,6 @@ const ClientRecipeSearch = ({
 
       const data: APIRecipeResponse = await response.json();
 
-      // 受け取ったデータで状態を更新
       setDishName(data.dish_name);
       setCurrentRecipeIngredients(
         data.ingredients.map((ing) => ({
@@ -100,12 +104,8 @@ const ClientRecipeSearch = ({
         <IngredientSearch
           ingredients={ingredients}
           selectedIngredients={selectedIngredients}
-          inputValue={inputValue}
-          value={value}
-          setValue={setValue}
-          onInputChange={setInputValue}
-          onAddIngredient={handleAddIngredient}
-          onDeleteIngredient={handleDelete}
+          onAddIngredient={onAddIngredient}
+          onDeleteIngredient={onDeleteIngredient}
         />
 
         <SearchButton isLoading={isLoading} onClick={handleSearch} />
@@ -126,11 +126,6 @@ const ClientRecipeSearch = ({
               <CardContent>
                 <RecipeIngredients ingredients={currentRecipeIngredients} />
                 <RecipeSteps steps={currentSteps} />
-                {/* 一旦保留 */}
-                {/* <RecipeTipsAndArrangements
-            tips={tips}
-            arrangements={arrangements}
-          /> */}
               </CardContent>
             </Paper>
           )}
