@@ -6,7 +6,11 @@ async function getIngredients(): Promise<Ingredient[]> {
   if (!url) {
     throw new Error("BACKEND_API_URL is not defined");
   }
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    next: {
+      revalidate: 3600, // 1時間キャッシュ
+    },
+  });
   const data = await response.json();
 
   return data.map(
