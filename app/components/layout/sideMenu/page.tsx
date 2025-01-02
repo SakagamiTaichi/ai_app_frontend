@@ -1,6 +1,7 @@
 "use client";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import ChatIcon from "@mui/icons-material/Chat";
 import {
   Drawer,
   ListItem,
@@ -10,15 +11,18 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import List from "@mui/material/List";
-import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import TableRowsIcon from "@mui/icons-material/TableRows";
 import { useState } from "react";
 
 const menuItems = [
-  { label: "レシピ作成", href: "/", icon: <AccessAlarmIcon /> },
-  { label: "自動補完", href: "/graph", icon: <PendingActionsIcon /> },
-  { label: "グラフ", href: "/graph", icon: <BarChartIcon /> },
+  {
+    label: "レシピ作成",
+    href: "/page/recipe-ai",
+    icon: <RestaurantMenuIcon />,
+  },
+  { label: "チャット", href: "/page/chat-ai", icon: <ChatIcon /> },
+  { label: "Text-to-SQL", href: "/page/text-to-sql", icon: <TableRowsIcon /> },
 ];
 
 const SideMenu = () => {

@@ -63,7 +63,7 @@ export default function ChatPage() {
       // Create new EventSource
       const encodedMessage = encodeURIComponent(input);
       eventSourceRef.current = new EventSource(
-        `${process.env.NEXT_PUBLIC_CHAT_API_URL}?message=${encodedMessage}`
+        `${process.env.NEXT_PUBLIC_CHAT_API_URL}/chat/stream?message=${encodedMessage}`
       );
 
       let responseText = "";

@@ -58,7 +58,7 @@ const ClientRecipeSearch = ({
     setIsLoading(true);
     setRecipeVisible(true);
     try {
-      const url = process.env.NEXT_PUBLIC_RECIPE_AI_API_URL;
+      const url = process.env.NEXT_PUBLIC_CHAT_API_URL + "/recipes/generate";
       if (!url) {
         throw new Error("NEXT_PUBLIC_RECIPE_AI_API_URL is not defined");
       }
