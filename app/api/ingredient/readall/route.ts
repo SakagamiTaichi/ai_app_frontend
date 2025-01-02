@@ -1,27 +1,37 @@
+// app/api/ingredient/readall/route.ts
 import { NextResponse } from "next/server";
-import env from "dotenv";
 import mongoose from "mongoose";
 import IngredientModel from "@/app/models/IngredientModel";
 
-export async function GET() {
-  env.config();
+let cachedConnection: typeof mongoose | null = null;
+
+async function connectDB() {
+  if (cachedConnection) {
+    return cachedConnection;
+  }
 
   const mongoUri = process.env.MONGO_URI;
   if (!mongoUri) {
-    throw new Error("MONGO_URI is not defined in the environment variables");
+    throw new Error("MONGO_URI is not defined");
   }
 
   try {
-    // await を追加して接続が完了するまで待つ
-    await mongoose.connect(mongoUri);
+    const connection = await mongoose.connect(mongoUri);
+    cachedConnection = connection;
+    return connection;
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    throw error;
+  }
+}
 
+export async function GET() {
+  try {
+    await connectDB();
     const ingredients = await IngredientModel.find();
-
-    // finally ブロックで確実に接続を閉じる
     return NextResponse.json(ingredients);
   } catch (error) {
+    console.error("Error fetching ingredients:", error);
     return NextResponse.json({ error: "Database error" }, { status: 500 });
-  } finally {
-    await mongoose.connection.close();
   }
 }
