@@ -2,7 +2,7 @@ import ClientRecipeSearch from "../../components/ui/RecipeSearch";
 import { Ingredient } from "../../types";
 
 async function getIngredients(): Promise<Ingredient[]> {
-  var url = process.env.BACKEND_API_URL + "/ingredient/readall";
+  const url = process.env.BACKEND_API_URL + "/ingredient/readall";
   if (!url) {
     throw new Error("BACKEND_API_URL is not defined");
   }

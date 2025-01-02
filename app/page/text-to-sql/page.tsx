@@ -6,25 +6,31 @@ import {
   Button,
   CircularProgress,
   Container,
-  IconButton,
   Paper,
   TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
 
-// Define types for the API response
+// データ行の基本型を定義
+interface BaseRow {
+  [key: string]: string | number | boolean | null;
+}
+
+// ユニークIDを含むデータ行の型を定義
+interface DataRow extends BaseRow {
+  uniqueId: string;
+}
+
+// APIレスポンスの型を定義
 interface ResponseData {
   columns: GridColDef[];
-  rows: any[];
+  rows: BaseRow[];
 }
 
 export default function DataGridDemo() {
   const [input, setInput] = React.useState("");
-  // Add state for dynamic columns and rows
   const [columns, setColumns] = React.useState<GridColDef[]>([]);
-  const [rows, setRows] = React.useState<any[]>([]);
-  // ローディング中かどうか
+  const [rows, setRows] = React.useState<BaseRow[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
@@ -50,7 +56,6 @@ export default function DataGridDemo() {
       });
       const data: ResponseData = await response.json();
 
-      // Update the columns and rows with the response data
       setColumns(data.columns);
       setRows(data.rows);
     } catch (error) {
@@ -60,7 +65,7 @@ export default function DataGridDemo() {
     }
   };
 
-  const rowsWithId = rows.map((row, index) => ({
+  const rowsWithId: DataRow[] = rows.map((row, index) => ({
     ...row,
     uniqueId: `row-${index}-${Date.now()}-${Math.random()
       .toString(36)
@@ -89,9 +94,9 @@ export default function DataGridDemo() {
                 bgcolor: "rgb(15, 23, 42)",
                 "&:hover": { bgcolor: "rgb(30, 41, 59)" },
                 py: 1.5,
-                minWidth: "120px", // 固定幅を設定
-                px: 3, // 水平方向のパディングを追加
-                whiteSpace: "nowrap", // テキストの折り返しを防止
+                minWidth: "120px",
+                px: 3,
+                whiteSpace: "nowrap",
               }}
               startIcon={
                 isLoading ? (
@@ -122,7 +127,6 @@ export default function DataGridDemo() {
                   },
                 },
               }}
-              // 絶対に一意になるような値を生成する
               getRowId={(row) => row.uniqueId}
               pageSizeOptions={[10]}
               disableRowSelectionOnClick
