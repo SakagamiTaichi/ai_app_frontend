@@ -49,6 +49,9 @@ const ClientRecipeSearch = ({
   // レシピのコツ
   const [tips, setTips] = useState<string[]>([]);
 
+  // レシピの画像URL
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   // ドロワーの開閉状態
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -115,6 +118,12 @@ const ClientRecipeSearch = ({
     setSteps(recipe.steps);
     setTips(recipe.tips);
     setRecipeVisible(true);
+
+    //TODO あまりにも早く表示すると画像が表示されないため、少し遅延させる
+    setTimeout(() => {
+      setImageUrl(recipe.image_url);
+    }, 1000);
+    setImageUrl(recipe.image_url);
   };
 
   return (
@@ -164,6 +173,13 @@ const ClientRecipeSearch = ({
             />
           ) : (
             <Paper elevation={1} sx={{ p: 3 }}>
+              {/* //レシピ画像を表示する */}
+              <Box
+                component="img"
+                src={imageUrl}
+                alt={dishName}
+                style={{ width: "100%", height: "auto" }}
+              />
               <RecipeHeader dishName={dishName} />
               <CardContent>
                 <RecipeIngredients ingredients={currentRecipeIngredients} />

@@ -70,6 +70,7 @@ export const RecipeHistoryDrawer: React.FC<RecipeHistoryDrawerProps> = ({
           id: recipeHistory.id,
           dishName: recipeHistory.dish_name,
           createdAt: recipeHistory.created_at,
+          imageUrl: recipeHistory.image_url,
         }));
 
         // 変換後の配列を直接セット

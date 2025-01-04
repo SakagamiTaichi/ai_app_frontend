@@ -18,6 +18,7 @@ export interface RecipeHistoryAPIResponse {
   id: string;
   dish_name: string;
   created_at: Date;
+  image_url: string;
 }
 
 export interface RecipeHistoriesAPIResponse {
@@ -28,6 +29,7 @@ interface RecipeHistory {
   id: string;
   dishName: string;
   createdAt: Date;
+  imageUrl: string;
 }
 
 export interface RecipeHistories {
@@ -39,6 +41,7 @@ export interface APIRecipeResponse {
   ingredients: APIRecipeIngredient[];
   steps: string[];
   tips: string[];
+  image_url: string;
 }
 
 export type Role = "user" | "assistant";
