@@ -14,6 +14,26 @@ export interface APIRecipeIngredient {
   amount: string;
 }
 
+export interface RecipeHistoryAPIResponse {
+  id: string;
+  dish_name: string;
+  created_at: Date;
+}
+
+export interface RecipeHistoriesAPIResponse {
+  recipe_histories: RecipeHistoryAPIResponse[];
+}
+
+interface RecipeHistory {
+  id: string;
+  dishName: string;
+  createdAt: Date;
+}
+
+export interface RecipeHistories {
+  recipeHistories: RecipeHistory[];
+}
+
 export interface APIRecipeResponse {
   dish_name: string;
   ingredients: APIRecipeIngredient[];

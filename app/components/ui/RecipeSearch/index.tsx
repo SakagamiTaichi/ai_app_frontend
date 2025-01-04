@@ -1,13 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { CardContent, Paper, Skeleton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CardContent,
+  IconButton,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { APIRecipeResponse, Ingredient, RecipeIngredient } from "@/app/types";
 import { IngredientSearch } from "../IngredientSearch";
 import { SearchButton } from "../SearchButton";
 import { RecipeHeader } from "../RecipeHeader";
 import { RecipeIngredients } from "../RecipeIngredients";
 import { RecipeSteps } from "../RecipeSteps";
+import { History } from "@mui/icons-material";
+import { RecipeHistoryDrawer } from "../RecipeHistoryDrawer";
 
 interface ClientRecipeSearchProps {
   initialIngredients: Ingredient[];
@@ -34,6 +44,9 @@ const ClientRecipeSearch = ({
   >([]);
   // レシピの手順
   const [currentSteps, setCurrentSteps] = useState<string[]>([]);
+
+  // ドロワーの開閉状態
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const onAddIngredient = (newIngredient: Ingredient) => {
     if (!selectedIngredients.some((ing) => ing.name === newIngredient.name)) {
@@ -77,15 +90,7 @@ const ClientRecipeSearch = ({
       }
 
       const data: APIRecipeResponse = await response.json();
-
-      setDishName(data.dish_name);
-      setCurrentRecipeIngredients(
-        data.ingredients.map((ing) => ({
-          name: ing.name,
-          amount: ing.amount,
-        }))
-      );
-      setCurrentSteps(data.steps);
+      displayRecipe(data);
     } catch (error) {
       console.error("レシピの検索中にエラーが発生しました:", error);
       alert("レシピの検索中にエラーが発生しました。もう一度お試しください。");
@@ -94,12 +99,38 @@ const ClientRecipeSearch = ({
     }
   };
 
+  // レシピ表示関数（履歴からの表示にも使用）
+  const displayRecipe = (recipe: APIRecipeResponse) => {
+    setDishName(recipe.dish_name);
+    setCurrentRecipeIngredients(
+      recipe.ingredients.map((ing) => ({
+        name: ing.name,
+        amount: ing.amount,
+      }))
+    );
+    setCurrentSteps(recipe.steps);
+    setRecipeVisible(true);
+  };
+
   return (
     <Stack spacing={3} sx={{ maxWidth: 800, mx: "auto", p: 2 }}>
-      <Paper elevation={1} sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          食材からレシピ検索
-        </Typography>
+      <Paper elevation={1} sx={{ p: 3, position: "relative" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h6">食材からレシピ検索</Typography>
+          <IconButton
+            onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+            sx={{ mt: -1, mr: -1 }}
+          >
+            <History />
+          </IconButton>
+        </Box>
 
         <IngredientSearch
           ingredients={ingredients}
@@ -110,6 +141,12 @@ const ClientRecipeSearch = ({
 
         <SearchButton isLoading={isLoading} onClick={handleSearch} />
       </Paper>
+
+      <RecipeHistoryDrawer
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        displayRecipe={displayRecipe}
+      />
 
       {recipeVisible && (
         <>
