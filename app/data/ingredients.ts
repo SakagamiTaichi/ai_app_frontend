@@ -1,5 +1,3 @@
-import { ca } from "date-fns/locale";
-
 // ダミーのデータを返す
 const ingredientsData = [
   {
