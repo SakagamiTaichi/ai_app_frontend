@@ -38,6 +38,7 @@ export interface APIRecipeResponse {
   dish_name: string;
   ingredients: APIRecipeIngredient[];
   steps: string[];
+  tips: string[];
 }
 
 export type Role = "user" | "assistant";

@@ -18,6 +18,7 @@ import { RecipeIngredients } from "../RecipeIngredients";
 import { RecipeSteps } from "../RecipeSteps";
 import { History } from "@mui/icons-material";
 import { RecipeHistoryDrawer } from "../RecipeHistoryDrawer";
+import { RecipeTipsAndArrangements } from "../RecipeTipsAndArrangements";
 
 interface ClientRecipeSearchProps {
   initialIngredients: Ingredient[];
@@ -43,7 +44,10 @@ const ClientRecipeSearch = ({
     RecipeIngredient[]
   >([]);
   // レシピの手順
-  const [currentSteps, setCurrentSteps] = useState<string[]>([]);
+  const [steps, setSteps] = useState<string[]>([]);
+
+  // レシピのコツ
+  const [tips, setTips] = useState<string[]>([]);
 
   // ドロワーの開閉状態
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -108,7 +112,8 @@ const ClientRecipeSearch = ({
         amount: ing.amount,
       }))
     );
-    setCurrentSteps(recipe.steps);
+    setSteps(recipe.steps);
+    setTips(recipe.tips);
     setRecipeVisible(true);
   };
 
@@ -162,7 +167,10 @@ const ClientRecipeSearch = ({
               <RecipeHeader dishName={dishName} />
               <CardContent>
                 <RecipeIngredients ingredients={currentRecipeIngredients} />
-                <RecipeSteps steps={currentSteps} />
+                <RecipeSteps steps={steps} />
+                {tips && tips.length > 0 && (
+                  <RecipeTipsAndArrangements tips={tips} />
+                )}
               </CardContent>
             </Paper>
           )}
