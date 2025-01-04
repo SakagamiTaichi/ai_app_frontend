@@ -2,6 +2,7 @@ import { Alert, AlertTitle, Box, Typography } from "@mui/material";
 
 interface RecipeTipsAndArrangementsProps {
   tips: string[];
+  arrangements: string[];
 }
 
 export const RecipeTipsAndArrangements: React.FC<
