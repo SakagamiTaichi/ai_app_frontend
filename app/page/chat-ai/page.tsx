@@ -1,4 +1,3 @@
-// app/page.tsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -9,6 +8,8 @@ import {
   Container,
   Paper,
   Typography,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 
 interface Message {
@@ -122,11 +123,35 @@ export default function ChatPage() {
     }
   };
 
+  const handleReset = () => {
+    setMessages([
+      {
+        content: "こんにちはなのだ！ずんだもんとお話しましょう！",
+        isUser: false,
+      },
+    ]);
+    setInput("");
+    setIsLoading(false);
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+  };
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Chat with Zundamon
+          </Typography>
+          <Button color="inherit" onClick={handleReset}>
+            Reset Chat
+          </Button>
+        </Toolbar>
+      </AppBar>
       <Paper
         elevation={3}
-        sx={{ height: "80vh", display: "flex", flexDirection: "column" }}
+        sx={{ height: "70vh", display: "flex", flexDirection: "column", mt: 2 }}
       >
         {/* Chat messages */}
         <Box
