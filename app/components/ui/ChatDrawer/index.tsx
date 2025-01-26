@@ -15,13 +15,7 @@ import {
   Button,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import {
-  APIRecipeResponse,
-  InformationsResponse,
-  RecipeHistories,
-  RecipeHistoriesAPIResponse,
-} from "@/app/types";
-import { format } from "date-fns";
+import { InformationsResponse } from "@/app/types";
 
 interface RecipeHistoryDrawerProps {
   isDrawerOpen: boolean;
