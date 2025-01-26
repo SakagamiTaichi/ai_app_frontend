@@ -57,3 +57,12 @@ export interface WebSocketHookReturn {
   sendMessage: (message: string) => void;
   resetMessages: () => void;
 }
+
+export interface InformationsResponse {
+  informations: Information[];
+}
+
+export interface Information {
+  id: string;
+  document: string;
+}
