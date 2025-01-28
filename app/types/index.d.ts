@@ -66,3 +66,21 @@ export interface Information {
   id: string;
   document: string;
 }
+
+export interface InitSQLDataAPIResponse {
+  informations: PersonalInformation[];
+}
+
+interface PersonalInformation {
+  id: string;
+  name: string;
+  name_kana: string;
+  sex: string;
+  phone_number: int;
+  mail: string;
+  postcode: string;
+  address: string;
+  birthday: string;
+  age: int;
+  blood_type: string;
+}
